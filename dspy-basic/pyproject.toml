@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "dspy-basic"
+version = "0.1.0"
+description = ""
+authors = ["andymc629 <andrewpmcmahon629@gmail.com>"]
+readme = "README.md"
+packages = [{include = "dspy_basic"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+dspy-ai = "^2.4.5"
+pytest = "^8.1.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
