@@ -2,9 +2,14 @@
 import dspy
 from dspy.datasets import HotPotQA
 from dspy.teleprompt import BootstrapFewShot
+import json
 
+def get_config(config_path="../configs/dev.json"):
+    with open(config_path) as f:
+        config_dict = json.load(f)
+    return config_dict
 
-def load_and_configure():
+def load_and_configure(lm=config_dict['models']['lm']['model'], rm=config_dict['models']['rm']['url']):
     # load models
     llama2 = dspy.OllamaLocal(model="llama2")
     colbertv2_wiki17_abstracts = dspy.ColBERTv2(url='http://20.102.90.50:2017/wiki17_abstracts')
@@ -14,7 +19,7 @@ def load_and_configure():
 
 # Load the train and development set.
 def load_dataset():
-    dataset = HotPotQA(train_seed=1, train_size=20, eval_seed=2023, dev_size=50, test_size=0)
+    dataset = HotPotQA(train_seed=1, train_size=2, eval_seed=2023, dev_size=50, test_size=0)
     # Tell DSPy that the 'question' field is the input. Any other fields are labels and/or metadata.
     trainset = [x.with_inputs('question') for x in dataset.train]
     devset = [x.with_inputs('question') for x in dataset.dev]
@@ -77,4 +82,7 @@ if __name__ == '__main__':
     # Print the contexts and the answer.
     print(f"Question: {my_question}")
     print(f"Predicted Answer: {pred.answer}")
+    print(f"Answer Type: {type(pred.answer)}")
+    print(f"Context Type: {type(pred.context)}")
+    
     print(f"Retrieved Contexts (truncated): {[c[:200] + '...' for c in pred.context]}")

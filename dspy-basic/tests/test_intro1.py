@@ -1,12 +1,16 @@
 # Test the intro1.py example. See https://dspy-docs.vercel.app/docs/tutorials/rag
 import pytest
 import dspy
-from dspy_basic.intro1 import load_and_configure
 from dspy_basic.intro1 import GenerateAnswer
 from dspy_basic.intro1 import RAG
-from dspy_basic.intro1 import compile_pipeline
-from dspy_basic.intro1 import load_dataset
-from dspy_basic.intro1 import validate_context_and_answer
+from dspy_basic.intro1 import (
+    compile_pipeline, 
+    load_dataset, 
+    get_config,
+    load_and_configure,
+    validate_context_and_answer)
+
+
 import pydantic
 
 @pytest.fixture
@@ -28,6 +32,14 @@ def compiled_pipeline(trainset):
         metric_callable=validate_context_and_answer, 
         trainset=trainset
         )
+
+def test_get_config():
+    assert get_config(config_path='configs/dev.json')
+    
+@pytest.fixutre
+def config_dict():
+    return get_config(config_path='configs/dev.json')
+    
 
 def test_load_and_configure_runs():
     assert load_and_configure()
