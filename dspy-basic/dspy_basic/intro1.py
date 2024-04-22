@@ -55,7 +55,10 @@ def compile_pipeline(pipeline=RAG(), metric_callable=validate_context_and_answer
     compiled_rag = teleprompter.compile(pipeline, trainset=trainset)
     return compiled_rag
     
-
+def call_compiled_pipeline(compiled_rag_pipeline, question):
+    prediction = compiled_rag_pipeline(question)
+    return prediction
+    
 if __name__ == '__main__':
     # load models
     llama2, colbertv2_wiki17_abstracts = load_and_configure()
@@ -63,4 +66,15 @@ if __name__ == '__main__':
     print("trainset[0]:", trainset[0])
     print("devset[0]:", devset[0])
     
-    compile_pipeline(pipeline=RAG(), metric_callable=validate_context_and_answer, trainset=trainset)
+    compiled_rag_pipeline = compile_pipeline(pipeline=RAG(), metric_callable=validate_context_and_answer, trainset=trainset)
+    
+    # Ask any question you like to this simple RAG program.
+    my_question = "What is quantum field theory?"
+
+    # Get the prediction. This contains `pred.context` and `pred.answer`.
+    pred = compiled_rag_pipeline(question=my_question)
+
+    # Print the contexts and the answer.
+    print(f"Question: {my_question}")
+    print(f"Predicted Answer: {pred.answer}")
+    print(f"Retrieved Contexts (truncated): {[c[:200] + '...' for c in pred.context]}")
