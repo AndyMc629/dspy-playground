@@ -4,7 +4,7 @@ from dspy.datasets import HotPotQA
 from dspy.teleprompt import BootstrapFewShot
 import json
 
-def get_config(config_path="../configs/dev.json"):
+def get_config(config_path="../configs/dev.json"): # TODO: use configuration in arguments
     with open(config_path) as f:
         config_dict = json.load(f)
     return config_dict
